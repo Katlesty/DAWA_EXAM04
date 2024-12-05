@@ -1,0 +1,72 @@
+<app-dashboard/>
+<div class="max-w-screen-xl items-center justify-between mx-auto p-4 py-4">
+  <div class="flex justify-between my-6">
+    <h2 class="text-2xl font-bold mb-4">Categorias</h2>
+    <button class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-800 dark:hover:bg-blue-900 dark:focus:ring-blue-800" (click)="openAddModal()">Agregar</button>
+  </div>
+
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr class="bg-gray-200">
+        <th class="py-2 px-4 w-1/6" scope="col">Nombre</th>
+        <th class="py-2 px-4 w-4/6"scope="col">Descripcion</th>
+        <th class="py-2 px-4 w-1/6" scope="">
+            <span class="sr-only">Editar</span>
+            <span class="sr-only">Eliminar</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categories" class="border-b">
+        <td class="py-2 px-4" scope="row">{{ category.name }}</td>
+        <td class="py-2 px-4" scope="row">{{ category.description }}</td>
+        <td class="py-2 px-4 text-right">
+          <button class=" font-medium text-blue-600 dark:text-blue-500 hover:underline px-3 " (click)="openEditModal(category)">Editar</button>
+          <button class="font-medium text-red-600 dark:text-red-500 hover:underline" (click)="deleteCategory(category._id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Add Modal -->
+<div *ngIf="showAddModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h3 class="text-xl font-bold mb-4">Agregar categoria</h3>
+    <form (ngSubmit)="addCategory()">
+      <div class="mb-4">
+        <label class="block mb-2">Nombre</label>
+        <input type="text" class="w-full p-2 border rounded" [(ngModel)]="newCategory.name" name="name" required />
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Descripcion</label>
+        <textarea class="w-full p-2 border rounded" [(ngModel)]="newCategory.description" name="description"></textarea>
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg mr-2" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-800 dark:hover:bg-blue-900 dark:focus:ring-blue-800">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div *ngIf="showEditModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h3 class="text-xl font-bold mb-4">Editar categoria</h3>
+    <form (ngSubmit)="updateCategory()">
+      <div class="mb-4">
+        <label class="block mb-2">Nombre</label>
+        <input type="text" class="w-full p-2 border rounded" [(ngModel)]="selectedCategory.name" name="name" required />
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Descripcion</label>
+        <textarea class="w-full p-2 border rounded" [(ngModel)]="selectedCategory.description" name="description"></textarea>
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg mr-2" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-800 dark:hover:bg-blue-900 dark:focus:ring-blue-800">Actualizar</button>
+      </div>
+    </form>
+  </div>
+</div>

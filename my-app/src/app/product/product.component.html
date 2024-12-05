@@ -1,0 +1,106 @@
+<app-dashboard/>
+<div class="max-w-screen-xl items-center justify-between mx-auto p-4 py-4">
+  <div class="flex justify-between my-6">
+    <h2 class="text-2xl font-bold mb-4">Productos</h2>
+    <button class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-800 dark:hover:bg-blue-900 dark:focus:ring-blue-800" (click)="openAddModal()">Agregar</button>
+  </div>
+
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr class="bg-gray-200">
+        <th class="py-2 px-4 w-1/6" scope="col">Nombre</th>
+        <th class="py-2 px-4 w-4/6" scope="col">Descripción</th>
+        <th class="py-2 px-4 w-1/6" scope="col">Precio</th>
+        <th class="py-2 px-4 w-1/6" scope="col">Categoría</th>
+        <th class="py-2 px-4 w-1/6" scope="col">Cantidad</th>
+        <th class="py-2 px-4 w-1/6" scope="col">
+          <span class="sr-only">Editar</span>
+          <span class="sr-only">Eliminar</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products" class="border-b">
+        <td class="py-2 px-4" scope="row">{{ product.name }}</td>
+        <td class="py-2 px-4" scope="row">{{ product.description }}</td>
+        <td class="py-2 px-4" scope="row">{{ product.price }}</td>
+        <td class="py-2 px-4" scope="row">{{ product.category?.name }}</td>
+        <td class="py-2 px-4" scope="row">{{ product.quantity }}</td>
+        <td class="py-2 px-4 text-right">
+          <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline px-3" (click)="openEditModal(product)">Editar</button>
+          <button class="font-medium text-red-600 dark:text-red-500 hover:underline" (click)="deleteProduct(product._id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Add Modal -->
+<div *ngIf="showAddModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h3 class="text-xl font-bold mb-4">Agregar Producto</h3>
+    <form (ngSubmit)="addProduct()">
+      <div class="mb-4">
+        <label class="block mb-2">Nombre</label>
+        <input type="text" class="w-full p-2 border rounded" [(ngModel)]="newProduct.name" name="name" required />
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Descripción</label>
+        <textarea class="w-full p-2 border rounded" [(ngModel)]="newProduct.description" name="description"></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Precio</label>
+        <input type="number" class="w-full p-2 border rounded" [(ngModel)]="newProduct.price" name="price" required />
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Categoría</label>
+        <select class="w-full p-2 border rounded" [(ngModel)]="newProduct.category" name="category" required>
+          <option *ngFor="let category of categories" [value]="category._id">{{ category.name }}</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Cantidad</label>
+        <input type="number" class="w-full p-2 border rounded" [(ngModel)]="newProduct.quantity" name="quantity" required />
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg mr-2" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-800 dark:hover:bg-blue-900 dark:focus:ring-blue-800">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div *ngIf="showEditModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h3 class="text-xl font-bold mb-4">Editar Producto</h3>
+    <form (ngSubmit)="updateProduct()">
+      <div class="mb-4">
+        <label class="block mb-2">Nombre</label>
+        <input type="text" class="w-full p-2 border rounded" [(ngModel)]="selectedProduct.name" name="name" required />
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Descripción</label>
+        <textarea class="w-full p-2 border rounded" [(ngModel)]="selectedProduct.description" name="description"></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Precio</label>
+        <input type="number" class="w-full p-2 border rounded" [(ngModel)]="selectedProduct.price" name="price" required />
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Categoría</label>
+        <select class="w-full p-2 border rounded" [(ngModel)]="selectedProduct.category" name="category" required>
+          <option *ngFor="let category of categories" [value]="category._id">{{ category.name }}</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block mb-2">Cantidad</label>
+        <input type="number" class="w-full p-2 border rounded" [(ngModel)]="selectedProduct.quantity" name="quantity" required />
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg mr-2" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-800 dark:hover:bg-blue-900 dark:focus:ring-blue-800">Actualizar</button>
+      </div>
+    </form>
+  </div>
+</div>
